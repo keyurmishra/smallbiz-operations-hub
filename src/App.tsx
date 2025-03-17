@@ -16,6 +16,9 @@ import InventoryAnalytics from "./pages/analytics/InventoryAnalytics";
 import CustomerAnalytics from "./pages/analytics/CustomerAnalytics";
 import Employees from "./pages/Employees";
 import Billing from "./pages/Billing";
+import InventoryItem from "./pages/inventory/InventoryItem";
+import InventoryCategories from "./pages/inventory/InventoryCategories";
+import InventoryAdjustments from "./pages/inventory/InventoryAdjustments";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +31,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/inventory/item/:id" element={<InventoryItem />} />
+          <Route path="/inventory/categories" element={<InventoryCategories />} />
+          <Route path="/inventory/adjustments" element={<InventoryAdjustments />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/employees" element={<Employees />} />

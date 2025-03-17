@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Plus, Filter, Search, MoreHorizontal, EditIcon, Trash2Icon } from 'lucide-react';
+import { Plus, Filter, Search, MoreHorizontal, EditIcon, Trash2Icon, PackageOpen, Tag, ListChecks } from 'lucide-react';
 
 interface InventoryItem {
   id: string;
@@ -98,6 +99,7 @@ const sampleInventory: InventoryItem[] = [
 ];
 
 const Inventory = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredInventory, setFilteredInventory] = useState<InventoryItem[]>(sampleInventory);
 
@@ -149,10 +151,28 @@ const Inventory = () => {
               Manage your product stock and catalog
             </p>
           </div>
-          <Button className="flex items-center gap-2 bg-primary text-primary-foreground shadow-md hover:bg-primary/90">
-            <Plus size={16} />
-            <span>Add Product</span>
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => navigate('/inventory/adjustments')}
+            >
+              <ListChecks size={16} />
+              <span>Adjustments</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => navigate('/inventory/categories')}
+            >
+              <Tag size={16} />
+              <span>Categories</span>
+            </Button>
+            <Button className="flex items-center gap-2 bg-primary text-primary-foreground shadow-md hover:bg-primary/90">
+              <Plus size={16} />
+              <span>Add Product</span>
+            </Button>
+          </div>
         </div>
         
         <Card className="overflow-hidden shadow-subtle">
@@ -200,7 +220,11 @@ const Inventory = () => {
                 <TableBody>
                   {filteredInventory.length > 0 ? (
                     filteredInventory.map((item) => (
-                      <TableRow key={item.id} className="animate-fade-in">
+                      <TableRow 
+                        key={item.id} 
+                        className="animate-fade-in cursor-pointer hover:bg-muted/50"
+                        onClick={() => navigate(`/inventory/item/${item.id}`)}
+                      >
                         <TableCell className="font-medium">{item.name}</TableCell>
                         <TableCell>{item.category}</TableCell>
                         <TableCell className="text-right">{formatCurrency(item.price)}</TableCell>
@@ -209,16 +233,36 @@ const Inventory = () => {
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                              <DropdownMenuItem 
+                                className="flex items-center gap-2 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/inventory/item/${item.id}`);
+                                }}
+                              >
+                                <PackageOpen className="h-4 w-4" />
+                                <span>View Details</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="flex items-center gap-2 cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <EditIcon className="h-4 w-4" />
                                 <span>Edit</span>
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
+                              <DropdownMenuItem 
+                                className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <Trash2Icon className="h-4 w-4" />
                                 <span>Delete</span>
                               </DropdownMenuItem>
