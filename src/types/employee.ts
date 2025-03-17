@@ -10,6 +10,13 @@ export interface Employee {
   status: 'Active' | 'On Leave' | 'Inactive';
   address?: string;
   emergencyContact?: string;
+  salary?: number;
+  employeeId?: string;
+  manager?: string;
+  skills?: string[];
+  education?: string;
+  birthDate?: string;
+  gender?: 'Male' | 'Female' | 'Other' | 'Prefer not to say';
   attendance: AttendanceRecord[];
   payments: PaymentRecord[];
 }
@@ -33,4 +40,8 @@ export interface PaymentRecord {
     from: string;
     to: string;
   };
+  taxDeduction?: number;
+  bonusAmount?: number;
+  overtimeHours?: number;
+  overtimeRate?: number;
 }
