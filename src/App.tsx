@@ -15,6 +15,7 @@ import SalesAnalytics from "./pages/analytics/SalesAnalytics";
 import InventoryAnalytics from "./pages/analytics/InventoryAnalytics";
 import CustomerAnalytics from "./pages/analytics/CustomerAnalytics";
 import Employees from "./pages/Employees";
+import EmployeeDetails from "./pages/employees/EmployeeDetails";
 import Billing from "./pages/Billing";
 import InventoryItem from "./pages/inventory/InventoryItem";
 import InventoryCategories from "./pages/inventory/InventoryCategories";
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/sales" element={<Sales />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/employees" element={<Employees />} />
+          <Route path="/employees/:id" element={<EmployeeDetails />} />
           <Route path="/billing" element={<Billing />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/analytics/sales" element={<SalesAnalytics />} />

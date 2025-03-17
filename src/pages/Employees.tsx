@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,84 +22,19 @@ import {
 } from '@/components/ui/table';
 import { Plus, Filter, Search, MoreHorizontal, Mail, Phone, Calendar } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-
-interface Employee {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: string;
-  department: string;
-  joinDate: string;
-  status: 'Active' | 'On Leave' | 'Inactive';
-}
-
-const sampleEmployees: Employee[] = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@example.com',
-    phone: '(555) 123-4567',
-    role: 'Store Manager',
-    department: 'Management',
-    joinDate: '2022-01-15',
-    status: 'Active',
-  },
-  {
-    id: '2',
-    name: 'Michael Chen',
-    email: 'michael.chen@example.com',
-    phone: '(555) 987-6543',
-    role: 'Sales Associate',
-    department: 'Sales',
-    joinDate: '2022-03-10',
-    status: 'Active',
-  },
-  {
-    id: '3',
-    name: 'Jessica Taylor',
-    email: 'jessica.taylor@example.com',
-    phone: '(555) 765-4321',
-    role: 'Inventory Specialist',
-    department: 'Inventory',
-    joinDate: '2022-02-20',
-    status: 'Active',
-  },
-  {
-    id: '4',
-    name: 'David Wilson',
-    email: 'david.wilson@example.com',
-    phone: '(555) 234-5678',
-    role: 'Customer Service',
-    department: 'Customer Support',
-    joinDate: '2022-04-05',
-    status: 'On Leave',
-  },
-  {
-    id: '5',
-    name: 'Emily Rodriguez',
-    email: 'emily.rodriguez@example.com',
-    phone: '(555) 876-5432',
-    role: 'Assistant Manager',
-    department: 'Management',
-    joinDate: '2022-01-30',
-    status: 'Active',
-  },
-  {
-    id: '6',
-    name: 'James Brown',
-    email: 'james.brown@example.com',
-    phone: '(555) 345-6789',
-    role: 'IT Support',
-    department: 'IT',
-    joinDate: '2022-05-15',
-    status: 'Inactive',
-  },
-];
+import { sampleEmployees } from '@/data/employeeData';
+import { Employee } from '@/types/employee';
+import { format } from 'date-fns';
 
 const Employees = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>(sampleEmployees);
+
+  // Handle view employee details
+  const handleViewEmployee = (id: string) => {
+    navigate(`/employees/${id}`);
+  };
 
   // Search functionality
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +78,35 @@ const Employees = () => {
     return name.split(' ').map(n => n[0]).join('');
   };
 
+  // Get today's attendance status for an employee
+  const getTodayAttendance = (employee: Employee) => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const record = employee.attendance.find(a => a.date === today);
+    
+    if (!record) return <Badge variant="outline" className="text-slate-700">Not Recorded</Badge>;
+    
+    switch (record.status) {
+      case 'Present':
+        return <Badge className="bg-emerald-100 text-emerald-700">Present</Badge>;
+      case 'Absent':
+        return <Badge className="bg-red-100 text-red-700">Absent</Badge>;
+      case 'Late':
+        return <Badge className="bg-amber-100 text-amber-700">Late</Badge>;
+      case 'Half-day':
+        return <Badge className="bg-blue-100 text-blue-700">Half-day</Badge>;
+      default:
+        return <Badge variant="outline">Unknown</Badge>;
+    }
+  };
+
+  // Add department counts
+  const departmentCounts = sampleEmployees.reduce((counts, employee) => {
+    counts[employee.department] = (counts[employee.department] || 0) + 1;
+    return counts;
+  }, {} as Record<string, number>);
+
+  const activeEmployees = sampleEmployees.filter(emp => emp.status === 'Active').length;
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -164,7 +129,7 @@ const Employees = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Total Employees</p>
-                  <h3 className="text-2xl font-bold mt-1">6</h3>
+                  <h3 className="text-2xl font-bold mt-1">{sampleEmployees.length}</h3>
                 </div>
               </div>
             </CardContent>
@@ -175,7 +140,7 @@ const Employees = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Active Employees</p>
-                  <h3 className="text-2xl font-bold mt-1">4</h3>
+                  <h3 className="text-2xl font-bold mt-1">{activeEmployees}</h3>
                 </div>
               </div>
             </CardContent>
@@ -186,7 +151,7 @@ const Employees = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Departments</p>
-                  <h3 className="text-2xl font-bold mt-1">4</h3>
+                  <h3 className="text-2xl font-bold mt-1">{Object.keys(departmentCounts).length}</h3>
                 </div>
               </div>
             </CardContent>
@@ -230,6 +195,7 @@ const Employees = () => {
                     <TableHead>Employee</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Department</TableHead>
+                    <TableHead>Today's Status</TableHead>
                     <TableHead>Join Date</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="w-[80px]"></TableHead>
@@ -261,6 +227,7 @@ const Employees = () => {
                         </TableCell>
                         <TableCell>{employee.role}</TableCell>
                         <TableCell>{employee.department}</TableCell>
+                        <TableCell>{getTodayAttendance(employee)}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
                             <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
@@ -276,9 +243,11 @@ const Employees = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem className="cursor-pointer">View Profile</DropdownMenuItem>
-                              <DropdownMenuItem className="cursor-pointer">Edit Details</DropdownMenuItem>
-                              <DropdownMenuItem className="cursor-pointer">Manage Access</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleViewEmployee(employee.id)}>
+                                View Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>Edit Details</DropdownMenuItem>
+                              <DropdownMenuItem>Manage Access</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -286,7 +255,7 @@ const Employees = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={6} className="h-24 text-center">
+                      <TableCell colSpan={7} className="h-24 text-center">
                         No results found.
                       </TableCell>
                     </TableRow>
