@@ -20,6 +20,7 @@ import Billing from "./pages/Billing";
 import InventoryItem from "./pages/inventory/InventoryItem";
 import InventoryCategories from "./pages/inventory/InventoryCategories";
 import InventoryAdjustments from "./pages/inventory/InventoryAdjustments";
+import More from "./pages/More";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/analytics/inventory" element={<InventoryAnalytics />} />
           <Route path="/analytics/customers" element={<CustomerAnalytics />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/more" element={<More />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
