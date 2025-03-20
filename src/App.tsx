@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MobileProvider } from "./hooks/use-mobile";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Inventory from "./pages/Inventory";
@@ -27,30 +28,32 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/inventory/item/:id" element={<InventoryItem />} />
-          <Route path="/inventory/categories" element={<InventoryCategories />} />
-          <Route path="/inventory/adjustments" element={<InventoryAdjustments />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/employees" element={<Employees />} />
-          <Route path="/employees/:id" element={<EmployeeDetails />} />
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/analytics/sales" element={<SalesAnalytics />} />
-          <Route path="/analytics/inventory" element={<InventoryAnalytics />} />
-          <Route path="/analytics/customers" element={<CustomerAnalytics />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/more" element={<More />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <MobileProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/inventory/item/:id" element={<InventoryItem />} />
+            <Route path="/inventory/categories" element={<InventoryCategories />} />
+            <Route path="/inventory/adjustments" element={<InventoryAdjustments />} />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/employees" element={<Employees />} />
+            <Route path="/employees/:id" element={<EmployeeDetails />} />
+            <Route path="/billing" element={<Billing />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/analytics/sales" element={<SalesAnalytics />} />
+            <Route path="/analytics/inventory" element={<InventoryAnalytics />} />
+            <Route path="/analytics/customers" element={<CustomerAnalytics />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/more" element={<More />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </MobileProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
