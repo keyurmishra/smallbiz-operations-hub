@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
@@ -25,7 +24,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { format, parseISO } from 'date-fns';
@@ -51,13 +49,11 @@ import {
   Receipt 
 } from 'lucide-react';
 
-// Form schema for attendance
 const attendanceSchema = z.object({
   status: z.enum(['Present', 'Absent', 'Late', 'Half-day']),
   note: z.string().optional(),
 });
 
-// Form schema for payment
 const paymentSchema = z.object({
   amount: z.coerce.number().positive({ message: "Amount must be positive" }),
   paymentMode: z.enum(['Bank Transfer', 'Cash', 'Check', 'Digital Wallet']),
@@ -72,7 +68,6 @@ const EmployeeDetails = () => {
   const [attendanceDialogOpen, setAttendanceDialogOpen] = useState(false);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   
-  // Forms
   const attendanceForm = useForm<z.infer<typeof attendanceSchema>>({
     resolver: zodResolver(attendanceSchema),
     defaultValues: {
@@ -91,20 +86,28 @@ const EmployeeDetails = () => {
     },
   });
 
-  // Load employee data
   useEffect(() => {
     if (id) {
       const employeeData = getEmployeeById(id);
       if (employeeData) {
         setEmployee(employeeData);
         
-        // Check today's attendance to pre-fill form
         const today = format(new Date(), 'yyyy-MM-dd');
         const todayAttendance = employeeData.attendance.find(a => a.date === today);
         if (todayAttendance) {
           attendanceForm.setValue('status', todayAttendance.status);
           if (todayAttendance.note) {
             attendanceForm.setValue('note', todayAttendance.note);
+          }
+        } else {
+          if (employeeData.status === 'Inactive') {
+            attendanceForm.setValue('status', 'Absent');
+            attendanceForm.setValue('note', 'Employee is inactive');
+          } else if (employeeData.status === 'On Leave') {
+            attendanceForm.setValue('status', 'Absent');
+            attendanceForm.setValue('note', 'Employee is on leave');
+          } else {
+            attendanceForm.setValue('status', 'Present');
           }
         }
       }
@@ -125,7 +128,6 @@ const EmployeeDetails = () => {
     );
   }
 
-  // Helpers
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('');
   };
@@ -176,9 +178,18 @@ const EmployeeDetails = () => {
     }
   };
 
-  // Handle attendance form submission
   const onAttendanceSubmit = (data: z.infer<typeof attendanceSchema>) => {
     if (id) {
+      if (employee.status === 'Inactive' && data.status === 'Present') {
+        data.status = 'Absent';
+        data.note = 'Employee is inactive and cannot be marked present';
+      }
+      
+      if (employee.status === 'On Leave' && data.status === 'Present') {
+        data.status = 'Absent';
+        data.note = data.note || 'Employee is on leave';
+      }
+      
       const updatedEmployee = updateEmployeeAttendance(id, data.status, data.note);
       if (updatedEmployee) {
         setEmployee(updatedEmployee);
@@ -187,7 +198,6 @@ const EmployeeDetails = () => {
     }
   };
 
-  // Handle payment form submission
   const onPaymentSubmit = (data: z.infer<typeof paymentSchema>) => {
     if (id) {
       const payment: Omit<PaymentRecord, 'id'> = {
@@ -211,10 +221,21 @@ const EmployeeDetails = () => {
     }
   };
 
-  // Get today's attendance
   const getTodayAttendance = () => {
     const today = format(new Date(), 'yyyy-MM-dd');
-    return employee.attendance.find(a => a.date === today);
+    const attendance = employee.attendance.find(a => a.date === today);
+    
+    if (!attendance) {
+      if (employee.status === 'Inactive' || employee.status === 'On Leave') {
+        return {
+          date: today,
+          status: 'Absent',
+          note: employee.status === 'Inactive' ? 'Employee is inactive' : 'Employee is on leave'
+        } as AttendanceRecord;
+      }
+    }
+    
+    return attendance;
   };
 
   const todayAttendance = getTodayAttendance();
@@ -222,7 +243,6 @@ const EmployeeDetails = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        {/* Header with back button */}
         <div className="flex items-center gap-4">
           <Button variant="outline" size="icon" onClick={() => navigate('/employees')}>
             <ArrowLeft className="h-4 w-4" />
@@ -230,7 +250,6 @@ const EmployeeDetails = () => {
           <h1 className="text-3xl font-bold tracking-tight">Employee Profile</h1>
         </div>
 
-        {/* Employee profile card */}
         <Card className="shadow-md">
           <CardContent className="pt-6">
             <div className="flex flex-col md:flex-row gap-6">
@@ -302,6 +321,9 @@ const EmployeeDetails = () => {
                     ? getAttendanceBadge(todayAttendance.status)
                     : <Badge variant="outline">Not Recorded</Badge>
                   }
+                  {todayAttendance && todayAttendance.note && (
+                    <p className="text-xs text-muted-foreground mt-1">{todayAttendance.note}</p>
+                  )}
                 </div>
               </div>
               {todayAttendance && todayAttendance.status !== 'Absent' && (
@@ -312,7 +334,11 @@ const EmployeeDetails = () => {
               )}
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => setAttendanceDialogOpen(true)}>
+              <Button 
+                onClick={() => setAttendanceDialogOpen(true)}
+                disabled={employee.status === 'Inactive'}
+                title={employee.status === 'Inactive' ? 'Cannot mark attendance for inactive employee' : ''}
+              >
                 {todayAttendance ? 'Update Attendance' : 'Mark Attendance'}
               </Button>
               <Button variant="outline" onClick={() => setPaymentDialogOpen(true)}>
@@ -323,14 +349,12 @@ const EmployeeDetails = () => {
           </CardFooter>
         </Card>
 
-        {/* Tabs for attendance and payment history */}
         <Tabs defaultValue="attendance">
           <TabsList className="grid w-full md:w-auto grid-cols-2">
             <TabsTrigger value="attendance">Attendance History</TabsTrigger>
             <TabsTrigger value="payments">Payment History</TabsTrigger>
           </TabsList>
           
-          {/* Attendance Tab */}
           <TabsContent value="attendance" className="mt-4">
             <Card>
               <CardHeader>
@@ -368,7 +392,6 @@ const EmployeeDetails = () => {
             </Card>
           </TabsContent>
           
-          {/* Payments Tab */}
           <TabsContent value="payments" className="mt-4">
             <Card>
               <CardHeader>
@@ -423,13 +446,15 @@ const EmployeeDetails = () => {
         </Tabs>
       </div>
 
-      {/* Attendance Dialog */}
       <Dialog open={attendanceDialogOpen} onOpenChange={setAttendanceDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Mark Attendance</DialogTitle>
             <DialogDescription>
               Record today's attendance for {employee.name}
+              {employee.status === 'On Leave' && (
+                <p className="text-amber-600 mt-1 text-sm">Note: This employee is currently on leave.</p>
+              )}
             </DialogDescription>
           </DialogHeader>
           
@@ -522,7 +547,6 @@ const EmployeeDetails = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Payment Dialog */}
       <Dialog open={paymentDialogOpen} onOpenChange={setPaymentDialogOpen}>
         <DialogContent>
           <DialogHeader>

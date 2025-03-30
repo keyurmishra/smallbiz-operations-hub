@@ -57,12 +57,21 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ filteredEmployees }) => {
     return name.split(' ').map(n => n[0]).join('');
   };
 
-  // Get today's attendance status for an employee
+  // Get today's attendance status for an employee with improved accuracy
   const getTodayAttendance = (employee: Employee) => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const record = employee.attendance.find(a => a.date === today);
     
-    if (!record) return <Badge variant="outline" className="text-slate-700">Not Recorded</Badge>;
+    if (!record) {
+      // If employee is inactive, show appropriate status
+      if (employee.status === 'Inactive') {
+        return <Badge variant="secondary" className="bg-slate-100 text-slate-700">Inactive</Badge>;
+      }
+      if (employee.status === 'On Leave') {
+        return <Badge variant="outline" className="text-amber-700 border-amber-200">On Leave</Badge>;
+      }
+      return <Badge variant="outline" className="text-slate-700">Not Recorded</Badge>;
+    }
     
     switch (record.status) {
       case 'Present':
