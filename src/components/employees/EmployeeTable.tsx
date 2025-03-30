@@ -75,13 +75,13 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({ filteredEmployees }) => {
     
     switch (record.status) {
       case 'Present':
-        return <Badge className="bg-emerald-100 text-emerald-700">Present</Badge>;
+        return <Badge className="bg-emerald-100 text-emerald-700">Present (8AM-7PM)</Badge>;
       case 'Absent':
         return <Badge className="bg-red-100 text-red-700">Absent</Badge>;
       case 'Late':
         return <Badge className="bg-amber-100 text-amber-700">Late</Badge>;
       case 'Half-day':
-        return <Badge className="bg-blue-100 text-blue-700">Half-day</Badge>;
+        return <Badge className="bg-blue-100 text-blue-700">Half-day (8AM-12PM)</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }

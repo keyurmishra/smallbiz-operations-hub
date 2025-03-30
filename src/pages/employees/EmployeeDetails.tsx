@@ -153,13 +153,13 @@ const EmployeeDetails = () => {
   const getAttendanceBadge = (status: string) => {
     switch (status) {
       case 'Present':
-        return <Badge className="bg-emerald-100 text-emerald-700">Present</Badge>;
+        return <Badge className="bg-emerald-100 text-emerald-700">Present (8AM-7PM)</Badge>;
       case 'Absent':
         return <Badge className="bg-red-100 text-red-700">Absent</Badge>;
       case 'Late':
         return <Badge className="bg-amber-100 text-amber-700">Late</Badge>;
       case 'Half-day':
-        return <Badge className="bg-blue-100 text-blue-700">Half-day</Badge>;
+        return <Badge className="bg-blue-100 text-blue-700">Half-day (8AM-12PM)</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }
@@ -361,6 +361,10 @@ const EmployeeDetails = () => {
                 <CardTitle>Attendance Records</CardTitle>
                 <CardDescription>
                   View employee's attendance history and status
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    <span className="inline-block mr-3">Full day: 8:00 AM - 7:00 PM</span>
+                    <span className="inline-block">Half day: 8:00 AM - 12:00 PM</span>
+                  </div>
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -452,6 +456,10 @@ const EmployeeDetails = () => {
             <DialogTitle>Mark Attendance</DialogTitle>
             <DialogDescription>
               Record today's attendance for {employee.name}
+              <div className="mt-1 text-xs text-muted-foreground">
+                <div>Full day: 8:00 AM - 7:00 PM</div>
+                <div>Half day: 8:00 AM - 12:00 PM</div>
+              </div>
               {employee.status === 'On Leave' && (
                 <p className="text-amber-600 mt-1 text-sm">Note: This employee is currently on leave.</p>
               )}
