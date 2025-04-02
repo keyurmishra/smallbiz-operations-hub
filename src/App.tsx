@@ -22,6 +22,9 @@ import InventoryItem from "./pages/inventory/InventoryItem";
 import InventoryCategories from "./pages/inventory/InventoryCategories";
 import InventoryAdjustments from "./pages/inventory/InventoryAdjustments";
 import More from "./pages/More";
+import Products from "./pages/Products";
+import POS from "./pages/POS";
+import CustomerManagement from "./pages/CustomerManagement";
 
 const queryClient = new QueryClient();
 
@@ -38,8 +41,11 @@ const App = () => (
             <Route path="/inventory/item/:id" element={<InventoryItem />} />
             <Route path="/inventory/categories" element={<InventoryCategories />} />
             <Route path="/inventory/adjustments" element={<InventoryAdjustments />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/sales" element={<Sales />} />
+            <Route path="/pos" element={<POS />} />
             <Route path="/customers" element={<Customers />} />
+            <Route path="/customer-management" element={<CustomerManagement />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/employees/:id" element={<EmployeeDetails />} />
             <Route path="/billing" element={<Billing />} />

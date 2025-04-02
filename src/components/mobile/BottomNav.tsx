@@ -7,7 +7,9 @@ import {
   ShoppingCart, 
   Users, 
   BarChart4, 
-  Menu 
+  Menu,
+  Tag,
+  UserCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -18,10 +20,10 @@ const BottomNav: React.FC = () => {
 
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
-    { icon: Package, label: 'Inventory', path: '/inventory' },
-    { icon: ShoppingCart, label: 'Sales', path: '/sales' },
+    { icon: Tag, label: 'Products', path: '/products' },
+    { icon: ShoppingCart, label: 'POS', path: '/pos' },
+    { icon: UserCircle, label: 'Customers', path: '/customer-management' },
     { icon: Users, label: 'Employees', path: '/employees' },
-    { icon: BarChart4, label: 'Analytics', path: '/analytics' },
     { icon: Menu, label: 'More', path: '/more' },
   ];
 
