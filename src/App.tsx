@@ -25,6 +25,8 @@ import More from "./pages/More";
 import Products from "./pages/Products";
 import POS from "./pages/POS";
 import CustomerManagement from "./pages/CustomerManagement";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Index />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/inventory/item/:id" element={<InventoryItem />} />

@@ -3,13 +3,13 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Home, 
-  Package, 
+  FileText, 
   ShoppingCart, 
   Users, 
-  BarChart4, 
+  CreditCard, 
   Menu,
-  Tag,
-  UserCircle
+  Package,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,12 +19,11 @@ const BottomNav: React.FC = () => {
   const currentPath = location.pathname;
 
   const navItems = [
-    { icon: Home, label: 'Home', path: '/' },
-    { icon: Tag, label: 'Products', path: '/products' },
-    { icon: ShoppingCart, label: 'POS', path: '/pos' },
-    { icon: UserCircle, label: 'Customers', path: '/customer-management' },
-    { icon: Users, label: 'Employees', path: '/employees' },
-    { icon: Menu, label: 'More', path: '/more' },
+    { icon: Home, label: 'Dashboard', path: '/' },
+    { icon: FileText, label: 'Invoices', path: '/pos' },
+    { icon: Package, label: 'Products', path: '/products' },
+    { icon: Users, label: 'Customers', path: '/customer-management' },
+    { icon: Settings, label: 'Settings', path: '/more' },
   ];
 
   const handleNavClick = (path: string) => {
@@ -36,8 +35,8 @@ const BottomNav: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background border-t shadow-lg safe-area-bottom">
-      <div className="grid grid-cols-6 h-16">
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t shadow-lg safe-area-bottom">
+      <div className="grid grid-cols-5 h-16">
         {navItems.map((item) => {
           const isActive = currentPath === item.path || 
                          (item.path !== '/' && currentPath.startsWith(item.path));
@@ -45,17 +44,13 @@ const BottomNav: React.FC = () => {
             <button
               key={item.path}
               className={cn(
-                "flex flex-col items-center justify-center space-y-1 transition-colors relative overflow-hidden",
+                "flex flex-col items-center justify-center space-y-1 transition-colors",
                 isActive 
                   ? "text-primary" 
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-gray-600 hover:text-gray-800"
               )}
               onClick={() => handleNavClick(item.path)}
             >
-              <span className={cn(
-                "absolute inset-0 opacity-0 bg-primary/10 rounded-full",
-                isActive ? "animate-pulse-subtle opacity-10" : ""
-              )} />
               <item.icon 
                 size={20} 
                 className={cn(
