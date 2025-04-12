@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Mesh, Group } from 'three';
+import { Group } from 'three';
 
 const CubeAvatar = () => {
   const groupRef = useRef<Group>(null!);
