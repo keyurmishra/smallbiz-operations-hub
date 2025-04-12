@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Card } from '@/components/ui/card';
+import ProfileScene from '@/components/3d/ProfileScene';
 import { 
   Settings, 
   CreditCard, 
@@ -59,13 +60,13 @@ const More = () => {
       icon: UserCircle, 
       label: 'My Profile', 
       description: 'View and update your profile',
-      action: () => console.log('Profile clicked') 
+      action: () => navigate('/profile') 
     },
     { 
       icon: Bell, 
       label: 'Notifications', 
       description: 'Manage your notification settings',
-      action: () => console.log('Notifications clicked') 
+      action: () => navigate('/settings')
     },
   ];
   
@@ -91,7 +92,7 @@ const More = () => {
       icon: Store, 
       label: 'Business Profile', 
       description: 'Manage your company details',
-      action: () => console.log('Business clicked') 
+      action: () => navigate('/settings') 
     },
     { 
       icon: CreditCard, 
@@ -127,7 +128,7 @@ const More = () => {
       icon: LogOut, 
       label: 'Logout', 
       description: 'Sign out of your account',
-      action: () => console.log('Logout clicked'),
+      action: () => navigate('/login'),
       danger: true
     },
   ];
@@ -176,6 +177,11 @@ const More = () => {
     <Layout>
       <div className="space-y-6 pb-6">
         <h1 className="text-2xl font-bold tracking-tight">More Options</h1>
+        
+        {/* 3D Profile Avatar */}
+        <Card className="overflow-hidden">
+          <ProfileScene />
+        </Card>
         
         {renderSection('Account', accountItems)}
         {renderSection('Preferences', preferencesItems)}

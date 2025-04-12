@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import SpinningLogo from '@/components/3d/SpinningLogo';
 import { 
   FileText, 
   Plus, 
@@ -45,6 +46,13 @@ const Index = () => {
           <h1 className="text-2xl font-bold mb-1">Welcome to Zoho Invoice</h1>
           <p className="text-muted-foreground">Manage your invoices and payments efficiently</p>
         </div>
+        
+        {/* 3D Logo */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-0">
+            <SpinningLogo />
+          </CardContent>
+        </Card>
         
         {/* Quick Actions */}
         <section>

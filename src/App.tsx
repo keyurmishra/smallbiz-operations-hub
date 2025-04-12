@@ -27,6 +27,7 @@ import POS from "./pages/POS";
 import CustomerManagement from "./pages/CustomerManagement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/analytics/customers" element={<CustomerAnalytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/more" element={<More />} />
+            <Route path="/profile" element={<ProfilePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
