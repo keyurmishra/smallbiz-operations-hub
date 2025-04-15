@@ -28,7 +28,7 @@ import CustomerManagement from "./pages/CustomerManagement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProfilePage from "./pages/profile/ProfilePage";
-import ChatBot from "./components/chat/ChatBot";
+import DiscordLayout from "./components/layout/DiscordLayout";
 
 const queryClient = new QueryClient();
 
@@ -42,30 +42,34 @@ const App = () => (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/" element={<Index />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/inventory/item/:id" element={<InventoryItem />} />
-            <Route path="/inventory/categories" element={<InventoryCategories />} />
-            <Route path="/inventory/adjustments" element={<InventoryAdjustments />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/sales" element={<Sales />} />
-            <Route path="/pos" element={<POS />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/customer-management" element={<CustomerManagement />} />
-            <Route path="/employees" element={<Employees />} />
-            <Route path="/employees/:id" element={<EmployeeDetails />} />
-            <Route path="/billing" element={<Billing />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/analytics/sales" element={<SalesAnalytics />} />
-            <Route path="/analytics/inventory" element={<InventoryAnalytics />} />
-            <Route path="/analytics/customers" element={<CustomerAnalytics />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/more" element={<More />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* Discord-style layout for authenticated routes */}
+            <Route path="/" element={<DiscordLayout />}>
+              <Route index element={<Index />} />
+              <Route path="inventory" element={<Inventory />} />
+              <Route path="inventory/item/:id" element={<InventoryItem />} />
+              <Route path="inventory/categories" element={<InventoryCategories />} />
+              <Route path="inventory/adjustments" element={<InventoryAdjustments />} />
+              <Route path="products" element={<Products />} />
+              <Route path="sales" element={<Sales />} />
+              <Route path="pos" element={<POS />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="customer-management" element={<CustomerManagement />} />
+              <Route path="employees" element={<Employees />} />
+              <Route path="employees/:id" element={<EmployeeDetails />} />
+              <Route path="billing" element={<Billing />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="analytics/sales" element={<SalesAnalytics />} />
+              <Route path="analytics/inventory" element={<InventoryAnalytics />} />
+              <Route path="analytics/customers" element={<CustomerAnalytics />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="more" element={<More />} />
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
+            
+            {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <ChatBot />
         </BrowserRouter>
       </MobileProvider>
     </TooltipProvider>

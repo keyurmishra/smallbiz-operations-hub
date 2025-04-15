@@ -62,6 +62,20 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				discord: {
+					'primary': '#5865F2',
+					'green': '#3BA55D',
+					'yellow': '#FAA81A',
+					'red': '#ED4245',
+					'dark': '#202225',
+					'darker': '#18191c',
+					'light': '#36393f',
+					'lighter': '#2f3136',
+					'lightest': '#40444b',
+					'text': '#dcddde',
+					'muted-text': '#a3a6aa',
+					'link': '#00aff4',
 				}
 			},
 			borderRadius: {
