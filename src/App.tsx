@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MobileProvider } from "./hooks/use-mobile";
+import DiscordLayout from "./components/layout/DiscordLayout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Inventory from "./pages/Inventory";
@@ -28,7 +29,6 @@ import CustomerManagement from "./pages/CustomerManagement";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProfilePage from "./pages/profile/ProfilePage";
-import DiscordLayout from "./components/layout/DiscordLayout";
 
 const queryClient = new QueryClient();
 

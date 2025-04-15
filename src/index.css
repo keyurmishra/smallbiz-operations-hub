@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
@@ -36,15 +37,6 @@
     --ring: 235 86% 65%; /* #5865F2 */
 
     --radius: 0.5rem;
-
-    --sidebar-background: 220 13% 14%; /* #202225 */
-    --sidebar-foreground: 0 0% 87%; /* #dcddde */
-    --sidebar-primary: 235 86% 65%; /* #5865F2 */
-    --sidebar-primary-foreground: 0 0% 100%; /* #ffffff */
-    --sidebar-accent: 223 6% 26%; /* #40444b */
-    --sidebar-accent-foreground: 0 0% 87%; /* #dcddde */
-    --sidebar-border: 225 8% 18%; /* #282a2e */
-    --sidebar-ring: 235 86% 65%; /* #5865F2 */
   }
 }
 
@@ -116,26 +108,5 @@
   
   .discord-user-item {
     @apply flex items-center gap-2 py-1.5 px-2 rounded hover:bg-discord-lightest cursor-pointer;
-  }
-}
-
-/* Mobile Specific Overrides */
-@media (max-width: 767px) {
-  .mobile-touch-feedback:active {
-    @apply bg-primary/10 transition-colors duration-200;
-  }
-  
-  /* Native-like scroll behavior */
-  html, body {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-  }
-  
-  /* Disable text selection on interactive elements */
-  button, a, .interactive {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
   }
 }

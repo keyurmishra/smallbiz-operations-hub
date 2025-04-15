@@ -87,7 +87,7 @@ const Channel = ({ to, icon, label, notifications, isActive = false }: ChannelPr
   );
 };
 
-export const DiscordSidebar = () => {
+const DiscordSidebar = () => {
   const location = useLocation();
   const [activeServerId, setActiveServerId] = useState(1);
 
