@@ -1,9 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Package, 
@@ -14,78 +11,14 @@ import {
   BarChart3, 
   Settings, 
   Hash, 
-  Volume2, 
-  CreditCard,
-  Inbox,
+  Bell, 
   MessageSquare,
-  Bell,
-  PlusCircle
+  PlusCircle,
+  CreditCard
 } from 'lucide-react';
-
-interface ServerIconProps {
-  active: boolean;
-  icon: React.ReactNode;
-  label: string;
-  notifications?: number;
-  isHome?: boolean;
-}
-
-const ServerIcon = ({ active, icon, label, notifications, isHome = false }: ServerIconProps) => {
-  return (
-    <TooltipProvider>
-      <Tooltip delayDuration={300}>
-        <TooltipTrigger asChild>
-          <div className={cn(
-            "discord-server-icon relative group",
-            active && "active",
-            isHome && "home"
-          )}>
-            {icon}
-            {active && (
-              <div className="absolute left-0 top-1/2 w-1 h-10 bg-white rounded-r-md -translate-y-1/2"></div>
-            )}
-            {notifications && (
-              <div className="absolute -bottom-1 -right-1 bg-discord-red text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                {notifications}
-              </div>
-            )}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="bg-black text-white border-none">
-          {label}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-};
-
-interface ChannelProps {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  notifications?: number;
-  isActive?: boolean;
-}
-
-const Channel = ({ to, icon, label, notifications, isActive = false }: ChannelProps) => {
-  return (
-    <Link 
-      to={to} 
-      className={cn(
-        "discord-channel",
-        isActive && "active"
-      )}
-    >
-      {icon}
-      <span className="flex-1">{label}</span>
-      {notifications && (
-        <Badge variant="destructive" className="rounded-full min-w-5 h-5 flex items-center justify-center">
-          {notifications}
-        </Badge>
-      )}
-    </Link>
-  );
-};
+import ServerIcon from './sidebar/ServerIcon';
+import ChannelCategory from './sidebar/ChannelCategory';
+import UserSection from './sidebar/UserSection';
 
 const DiscordSidebar = () => {
   const location = useLocation();
@@ -138,7 +71,7 @@ const DiscordSidebar = () => {
 
   return (
     <div className="flex h-screen">
-      {/* Servers sidebar - Discord's left sidebar with icons */}
+      {/* Servers sidebar */}
       <div className="w-[72px] bg-discord-dark flex flex-col items-center py-3 overflow-y-auto hide-scrollbar border-r border-discord-darker">
         {servers.map(server => (
           <ServerIcon
@@ -151,11 +84,11 @@ const DiscordSidebar = () => {
             label={server.label}
             notifications={server.notifications}
             isHome={server.isHome}
-            />
+          />
         ))}
       </div>
       
-      {/* Channels sidebar - Discord's second sidebar with channels list */}
+      {/* Channels sidebar */}
       <div className="w-60 bg-discord-lighter flex flex-col overflow-hidden">
         <div className="h-12 min-h-[3rem] border-b border-discord-dark shadow-sm flex items-center px-4">
           <h2 className="font-bold text-white">Shop Monitor</h2>
@@ -163,39 +96,16 @@ const DiscordSidebar = () => {
         
         <div className="flex-1 overflow-y-auto px-2 py-3">
           {channels.map(category => (
-            <div key={category.category}>
-              <h3 className="discord-section-title">{category.category}</h3>
-              <div className="space-y-0.5">
-                {category.items.map(channel => (
-                  <Channel
-                    key={channel.id}
-                    to={channel.to}
-                    icon={channel.icon}
-                    label={channel.label}
-                    notifications={channel.notifications}
-                    isActive={location.pathname === channel.to}
-                  />
-                ))}
-              </div>
-            </div>
+            <ChannelCategory
+              key={category.category}
+              category={category.category}
+              items={category.items}
+              currentPath={location.pathname}
+            />
           ))}
         </div>
         
-        {/* Discord-like user area */}
-        <div className="h-[52px] bg-discord-dark/50 mt-auto flex items-center px-2 gap-2">
-          <div className="w-8 h-8 rounded-full bg-discord-primary flex items-center justify-center text-white">
-            JD
-          </div>
-          <div className="flex-1">
-            <div className="text-sm font-medium text-white">John Doe</div>
-            <div className="text-xs text-discord-muted-text">#admin1234</div>
-          </div>
-          <div className="flex gap-1.5">
-            <button className="text-discord-muted-text hover:text-discord-text">
-              <Settings size={18} />
-            </button>
-          </div>
-        </div>
+        <UserSection />
       </div>
     </div>
   );
